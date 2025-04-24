@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { InputText } from 'easy-form/src/components/InputText';
 import { FormItem } from 'easy-form/src/components/FormItem';
-import { Form } from 'easy-form/src/components/Form';
 import { CurrencyDollarIcon, PhoneXMarkIcon } from '@heroicons/react/24/outline';
 
 const meta = {
@@ -22,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 const InputWrapper = ({ children }: { children: React.ReactNode }) => (
 	<div style={{ width: '360px', padding: '40px' }}>
-		<Form onSubmit={(data) => console.log(data)}>{children}</Form>
+		{children}
 	</div>
 );
 

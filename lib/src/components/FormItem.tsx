@@ -10,6 +10,7 @@ interface FormItemProps {
   children?: React.ReactNode; 
   status? : InputStatus;
   message? : string;
+  className?: string;
 }
 
 export const FormItem = ({ 
@@ -18,12 +19,13 @@ export const FormItem = ({
   required = false,
   children,
   status,
-  message 
+  message,
+  className 
 }: FormItemProps) => {
   const { control } = useFormContext();
 
   return (
-    <div className="formItem">
+    <div className={`formItem ${className}`}>
       {label && (
         <label className="formItem_label">
           {label}

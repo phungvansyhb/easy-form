@@ -1,4 +1,5 @@
 import 'easy-form/dist/styles.css';
+import './index.css';
 
 function App() {
 	return (
