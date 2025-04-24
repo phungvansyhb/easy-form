@@ -1,0 +1,49 @@
+.formItem {
+    &_content {
+      &--radioGroup {
+        display: flex;
+        gap: 16px;
+  
+        &.horizontal {
+          flex-direction: row;
+        }
+  
+        &.vertical {
+          flex-direction: column;
+        }
+      }
+  
+      &--radioLabel {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+  
+        &.disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      }
+  
+      &--radioInput {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        cursor: pointer;
+  
+        &[data-status="error"] {
+          border-color: var(--error-color);
+        }
+  
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+  
+      &--radioText {
+        font-size: 14px;
+        color: var(--text-color);
+      }
+    }
+  }

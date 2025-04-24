@@ -1,0 +1,52 @@
+{
+	"name": "easy-form",
+	"version": "1.0.0",
+	"description": "A React library help you manage form. Includes various of input component already",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+		"@types/react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0",
+		"autoprefixer": "^10.4.21",
+		"babel-core": "^6.26.3",
+		"babel-runtime": "^6.26.0",
+		"postcss": "^8.5.3",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"rimraf": "^6.0.1",
+		"rollup": "^4.40.0",
+		"rollup-plugin-sass": "^1.15.2",
+		"rollup-plugin-typescript2": "^0.36.0",
+		"typescript": "^5.8.3"
+	},
+	"scripts": {
+		"build": "tsc --emitDeclarationOnly && rollup -c",
+		"start": "rollup -c -w",
+		"clean": "rimraf dist",
+		"prebuild": "npm run clean"
+	},
+	"peerDependencies": {
+		"@hookform/resolvers": "^3.0.0",
+		"react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+		"react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+		"react-hook-form": "^7.0.0",
+		"zod": "^3.24.3"
+	},
+	"files": [
+		"dist"
+	],
+	"main": "dist/index.js",
+	"module": "dist/index.esm.js",
+	"types": "dist/index.d.ts",
+	"sideEffects": false,
+	"type": "module",
+	"keywords": [],
+	"author": "Phung Van Sy, Michel",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/YOUR_USERNAME/lunar-date.git"
+	},
+	"bugs": {
+		"url": "https://github.com/YOUR_USERNAME/lunar-date/issues"
+	},
+	"homepage": "https://github.com/YOUR_USERNAME/lunar-date#readme"
+}

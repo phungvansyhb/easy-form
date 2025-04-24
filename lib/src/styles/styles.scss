@@ -1,0 +1,198 @@
+@use 'sass:map';
+
+html,
+body {
+	box-sizing: border-box;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+$input-sizes: (
+	small: (
+		padding: 8px 12px,
+		font-size: 12px,
+		icon-size: 12px,
+	),
+	medium: (
+		padding: 10px 12px,
+		font-size: 14px,
+		icon-size: 14px,
+	),
+	large: (
+		padding: 16px 12px,
+		font-size: 16px,
+		icon-size: 16px,
+	),
+);
+
+$input-status: (
+	default: (
+		border-color: #ccc,
+		message-color: #09090b,
+		focus-color: #1a365d,
+		focus-shadow: rgba(26, 54, 93, 0.25),
+		hover-color: #999,
+	),
+	warning: (
+		border-color: #fbbf24,
+		message-color: #fbbf24,
+		focus-color: #92400e,
+		focus-shadow: rgba(250, 112, 27, 0.25),
+		hover-color: #f59e0b,
+	),
+	error: (
+		border-color: #f87171,
+		message-color: #f87171,
+		focus-color: #991b1b,
+		focus-shadow: rgba(242, 14, 14, 0.25),
+		hover-color: #ef4444,
+	),
+	success: (
+		border-color: #4ade80,
+		message-color: #4ade80,
+		focus-color: #166534,
+		focus-shadow: rgba(59, 248, 131, 0.25),
+		hover-color: #22c55e,
+	),
+);
+
+:root {
+	// Common variables
+	--input-border-radius: 6px;
+	--input-border-color: #ccc;
+	--input-transition: border-color 0.1s ease;
+	--input-label-size: 14px;
+	--input-label-color: #09090b;
+	--input-label-weight: 500;
+	--input-message-size: 14px;
+	--input-message-color: #09090b;
+}
+
+.formItem {
+	margin-bottom: 24px;
+	&_label {
+		font-size: var(--input-label-size);
+		@each $status, $properties in $input-status {
+			&[data-status='#{$status}'] {
+				color: map.get($properties, message-color);
+			}
+		}
+		color: var(--input-label-color);
+		font-weight: var(--input-label-weight);
+		margin-bottom: 6px;
+		display: block;
+		.sr-only {
+			color: red;
+			margin: -1px;
+			margin-left: 2px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+		}
+	}
+
+	&_content {
+		@each $status, $properties in $input-status {
+			&[data-status='#{$status}'] {
+				color: map.get($properties, message-color);
+			}
+		}
+		&--container {
+			position: relative;
+			display: flex;
+			align-items: center;
+		} 
+
+		&--wrapper {
+			width: 100%;
+		} 
+
+		&--iconPrefix {
+			position: absolute;
+			@each $size, $properties in $input-sizes {
+				&[data-size='#{$size}'] {
+					width:  map.get($properties, icon-size);
+					height:  map.get($properties, icon-size);
+				}
+			}
+			left: 12px;
+			display: flex;
+			align-items: center;
+		}
+		&--iconSuffix {
+			position: absolute;
+			@each $size, $properties in $input-sizes {
+				&[data-size='#{$size}'] {
+					width:  map.get($properties, icon-size);
+					height:  map.get($properties, icon-size);
+				}
+			}
+			right: 12px;
+			display: flex;
+			align-items: center;
+		}
+		&--textInput, &--textArea {
+			width: 100%;
+			border: 1px solid var(--input-border-color);
+			border-radius: var(--input-border-radius);
+			transition: var(--input-transition);
+
+			.formItem_content--container .formItem_content--iconPrefix + & {
+				padding-left: 36px;
+			}
+			&:has(+ span.formItem_content--iconSuffix) {
+				padding-right: 36px; 
+			}
+			
+			@each $size, $properties in $input-sizes {
+				&[data-size='#{$size}'] {
+					padding: map.get($properties, padding);
+					font-size: map.get($properties, font-size);
+				}
+			}
+	
+			@each $status, $properties in $input-status {
+				&[data-status='#{$status}'] {
+					border-color: map.get($properties, border-color);
+					color: map.get($properties, message-color);
+	
+					&:focus {
+						outline: none;
+						border-color: map.get($properties, focus-color);
+						box-shadow: 0 0 0 2px map.get($properties, focus-shadow);
+					}
+	
+					&:hover {
+						border-color: map.get($properties, hover-color);
+					}
+				}
+			}
+		}
+
+		&--textArea {
+			line-height: 1.5;
+			resize: none;
+			transition: var(--input-transition);
+			&.resizable {
+				resize: vertical;
+			}
+		}
+
+		&--message {
+			display: block;
+			font-size: var(--input-message-size);
+		}
+
+		&--footer {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 4px;
+			font-size: 12px;
+		}
+		
+		
+	}
+
+	
+}
+
+
