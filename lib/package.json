@@ -4,8 +4,8 @@
 	"description": "A React library help you manage form. Includes various of input component already",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-		"@types/react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0",
+		"@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+		"@types/react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
 		"autoprefixer": "^10.4.21",
 		"babel-core": "^6.26.3",
 		"babel-runtime": "^6.26.0",
@@ -26,6 +26,7 @@
 	},
 	"peerDependencies": {
 		"@hookform/resolvers": "^3.0.0",
+		"@phungvansyhb/vietnamese-lunar-date-picker": "^1.1.2",
 		"react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
 		"react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
 		"react-hook-form": "^7.0.0",
