@@ -1,6 +1,7 @@
 import './styles/styles.scss';
 import './styles/radioStyle.scss';
 import './styles/checkboxStyle.scss';
+import './styles/inputSelect.scss';
 import { InputText } from './components/InputText';
 import { Form } from './components/Form';
 import { FormItem } from './components/FormItem';

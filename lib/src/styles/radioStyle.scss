@@ -1,9 +1,21 @@
+@use 'sass:map';
+@use 'vars' as *;
 .formItem {
     &_content {
       &--radioGroup {
         display: flex;
         gap: 16px;
-  
+        @each $status, $properties in $input-status {
+          &[data-status='#{$status}'] {
+            color: map.get($properties, message-color);
+          }
+        }
+        @each $size, $properties in $input-sizes {
+          &[data-size='#{$size}'] {
+            font-size: map.get($properties, font-size);
+          }
+        }
+
         &.horizontal {
           flex-direction: row;
         }
@@ -27,23 +39,17 @@
       }
   
       &--radioInput {
+        &:checked {
+          accent-color: #1a365d; 
+        }
         width: 16px;
         height: 16px;
         margin: 0;
         cursor: pointer;
-  
-        &[data-status="error"] {
-          border-color: var(--error-color);
-        }
-  
         &:disabled {
           cursor: not-allowed;
         }
       }
-  
-      &--radioText {
-        font-size: 14px;
-        color: var(--text-color);
-      }
+     
     }
   }

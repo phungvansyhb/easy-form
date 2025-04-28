@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { InputText } from 'easy-form/src/components/InputText';
 import { FormItem } from 'easy-form/src/components/FormItem';
 import { CurrencyDollarIcon, PhoneXMarkIcon } from '@heroicons/react/24/outline';
+import { Form, ReactHookForm } from 'easy-form';
 
 const meta = {
 	title: 'Components/InputText',
@@ -19,11 +20,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const InputWrapper = ({ children }: { children: React.ReactNode }) => (
-	<div style={{ width: '360px', padding: '40px' }}>
-		{children}
-	</div>
-);
+const InputWrapper = ({ children }: { children: React.ReactNode }) => {
+	const form = ReactHookForm.useForm();
+	return (
+		<div style={{ width: '360px', padding: '40px' }}>
+			<Form onSubmit={(data) => console.log(data)} form={form}>
+				{children}
+			</Form>
+		</div>
+	);
+};
 
 export const Default: Story = {
 	render: ({ ...args }) => (

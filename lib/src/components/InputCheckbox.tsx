@@ -53,6 +53,8 @@ export const InputCheckbox = ({
         aria-describedby={helperText ? descriptionId : undefined}
         aria-required={required}
         aria-invalid={hasError}
+        data-size={size}
+        data-status={status}
       >
         {options.map((option) => (
           <label
@@ -81,6 +83,7 @@ export const InputCheckbox = ({
           <span 
             id={descriptionId}
             className={`helper-text`}
+            data-status={status}
             role={hasError ? 'alert' : undefined}
           >
             {helperText}

@@ -1,49 +1,73 @@
+@use 'sass:map';
+@use 'vars' as *;
 .formItem {
-    &_content {
-      &--checkboxGroup {
-        display: flex;
-        gap: 16px;
-  
-        &.horizontal {
-          flex-direction: row;
-        }
-  
-        &.vertical {
-          flex-direction: column;
-        }
+	&_content {
+    
+		&--checkboxGroup {
+			display: flex;
+			gap: 16px;
+			@each $status, $properties in $input-status {
+				&[data-status='#{$status}'] {
+					color: map.get($properties, message-color);
+				}
+			}
+			@each $size, $properties in $input-sizes {
+				&[data-size='#{$size}'] {
+					font-size: map.get($properties, font-size);
+				}
+			}
+
+			&.horizontal {
+				flex-direction: row;
+			}
+
+			&.vertical {
+				flex-direction: column;
+			}
+		}
+
+		&--checkboxLabel {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			cursor: pointer;
+			user-select: none;
+
+			&.disabled {
+				opacity: 0.7;
+				cursor: not-allowed;
+			}
+		}
+
+		&--checkboxInput {
+      &:checked {
+        accent-color: #1a365d; 
       }
-  
-      &--checkboxLabel {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        user-select: none;
-  
-        &.disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
+			@each $size, $properties in $input-sizes {
+				&[data-size='#{$size}'] {
+					padding: map.get($properties, padding);
+					font-size: map.get($properties, font-size);
+					width: map.get($properties, font-size);
+					height: map.get($properties, font-size);
+				}
+			}
+			width: 16px;
+			height: 16px;
+			margin: 0;
+			cursor: pointer;
+
+			&:disabled {
+				cursor: not-allowed;
+			}
+		}
+    &--footer{
+      .helper-text{
+        @each $status, $properties in $input-status {
+          &[data-status='#{$status}'] {
+            color: map.get($properties, message-color);
+          }
         }
-      }
-  
-      &--checkboxInput {
-        width: 16px;
-        height: 16px;
-        margin: 0;
-        cursor: pointer;
-  
-        &[data-status="error"] {
-          border-color: var(--error-color);
-        }
-  
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
-  
-      &--checkboxText {
-        font-size: 14px;
-        color: var(--text-color);
       }
     }
-  }
+	}
+}

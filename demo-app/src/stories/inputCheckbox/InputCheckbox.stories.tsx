@@ -71,6 +71,7 @@ export const Error: Story = {
     name: 'checkbox-group',
     options,
     status: 'error',
+    size: 'large',
     helperText: 'This field is required',
   },
 }; 
