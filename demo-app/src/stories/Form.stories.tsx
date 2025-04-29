@@ -9,6 +9,7 @@ import {
 	zod,
 	zodResolver,
 	ReactHookForm,
+	InputDatePicker
 } from 'easy-form';
 
 import { Form } from 'easy-form/src/components/Form';
@@ -34,6 +35,7 @@ const schema = z.object({
 	radio: z.string(),
 	number: z.number().min(1),
 	textarea: z.string().min(1),
+	date : z.date(),
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormExampleCpn = (args: any) => {
@@ -45,6 +47,7 @@ const FormExampleCpn = (args: any) => {
 		radio: 'option1',
 		number: 1,
 		textarea: 'textarea',
+		date : new Date(),
 	};
 	const form = ReactHookForm.useForm({
 		resolver: zodResolver(schema),
@@ -56,6 +59,11 @@ const FormExampleCpn = (args: any) => {
 			<Form
 				{...args}
 				form={form}>
+				<FormItem
+					name='date'
+					label='When is your birthday?'>
+					<InputDatePicker size='medium'/>
+				</FormItem>
 				<div className='flex gap-4'>
 					<FormItem
 						name='name'
