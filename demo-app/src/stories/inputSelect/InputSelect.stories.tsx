@@ -226,3 +226,27 @@ export const AllowSearch: Story = {
 		</InputWrapper>
 	),
 };
+
+export const AllowMultiple: Story = {
+	args: {
+		status: 'default',
+		size: 'medium',
+		helperText: 'Type to search',
+		placeholder: 'Username',
+		name: 'input',
+		options: ListLengthOptions,
+		allowSearch: true,
+		multiple: true,
+	},
+	render: ({ ...args }) => (
+		<InputWrapper>
+			<FormItem
+				status='default'
+				name='input'
+				label='Select multiple options'
+				message='This is a default message'>
+				<InputSelect {...args} />
+			</FormItem>
+		</InputWrapper>
+	),
+};

@@ -1,18 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { InputSize, InputStatus } from '../types/InputStatus';
+import React, { useEffect, useRef, useState } from 'react';
 import { SelectOption, SelectOptions, isGroupedOptions } from '../types/Options';
+
 import { cn } from '../utils/cn';
 
 export interface InputSelectProps {
 	name: string;
 	/** The options to display in the dropdown , it can be an array of options or an array of option groups */
 	options: SelectOptions;
-	/** The position of the option icon */  
+	/** The position of the option icon */
 	optionIconPosition?: 'left' | 'right';
-	/** The value of the selected option */
-	value?: string;
+	/** The value of the selected option(s) */
+	value?: string | string[];
 	/** The function to call when the value changes */
-	onChange?: (value: string) => void;
+	onChange?: (value: string | string[]) => void;
 	/** The status of the input */
 	status?: InputStatus;
 	/** The size of the input */
@@ -29,8 +30,10 @@ export interface InputSelectProps {
 	allowClear?: boolean;
 	/** Whether to show a search input */
 	allowSearch?: boolean;
-    /** Whether to show a no options found message */
-    notFoundRender?: React.ReactNode;
+	/** Whether to show a no options found message */
+	notFoundRender?: React.ReactNode;
+	/** Whether to allow multiple selections */
+	multiple?: boolean;
 }
 
 export const InputSelect = ({
@@ -47,12 +50,13 @@ export const InputSelect = ({
 	placeholder,
 	allowClear = false,
 	allowSearch = false,
-    notFoundRender,
+	notFoundRender,
+	multiple = false,
 	...props
 }: InputSelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
-	const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>([]);
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -68,13 +72,14 @@ export const InputSelect = ({
 		return options;
 	}, [options]);
 
-	// Find selected option when value changes
+	// Find selected options when value changes
 	useEffect(() => {
 		if (value) {
-			const option = allOptions.find((opt) => opt.value === value);
-			setSelectedOption(option || null);
+			const values = Array.isArray(value) ? value : [value];
+			const options = allOptions.filter((opt) => values.includes(opt.value));
+			setSelectedOptions(options);
 		} else {
-			setSelectedOption(null);
+			setSelectedOptions([]);
 		}
 	}, [value, allOptions]);
 
@@ -91,17 +96,32 @@ export const InputSelect = ({
 	}, []);
 
 	const handleSelect = (option: SelectOption) => {
-		onChange?.(option.value);
-		setSelectedOption(option);
-		// setIsOpen(false);
+		if (multiple) {
+			const newSelectedOptions = selectedOptions.some((opt) => opt.value === option.value)
+				? selectedOptions.filter((opt) => opt.value !== option.value)
+				: [...selectedOptions, option];
+			setSelectedOptions(newSelectedOptions);
+			onChange?.(newSelectedOptions.map((opt) => opt.value));
+		} else {
+			onChange?.(option.value);
+			setSelectedOptions([option]);
+			setIsOpen(false);
+		}
 		setSearchValue('');
 	};
 
 	const handleClear = (e: React.MouseEvent) => {
 		e.stopPropagation();
-		onChange?.('');
-		setSelectedOption(null);
+		onChange?.(multiple ? [] : '');
+		setSelectedOptions([]);
 		setSearchValue('');
+	};
+
+	const handleRemoveOption = (optionValue: string, e: React.MouseEvent) => {
+		e.stopPropagation();
+		const newSelectedOptions = selectedOptions.filter((opt) => opt.value !== optionValue);
+		setSelectedOptions(newSelectedOptions);
+		onChange?.(newSelectedOptions.map((opt) => opt.value));
 	};
 
 	// Filter options based on search
@@ -152,8 +172,10 @@ export const InputSelect = ({
 				e.preventDefault();
 				if (hoveredIndex >= 0 && hoveredIndex < allOptions.length) {
 					handleSelect(allOptions[hoveredIndex]);
-					setIsOpen(false);
-					inputRef.current?.blur();
+					if (!multiple) {
+						setIsOpen(false);
+						inputRef.current?.blur();
+					}
 				}
 				break;
 			case 'Escape':
@@ -177,19 +199,28 @@ export const InputSelect = ({
 	};
 
 	function SelectOptionCpn({ option, index }: { option: SelectOption; index: number }) {
+		const isSelected = selectedOptions.some((opt) => opt.value === option.value);
 		return (
 			<div
 				key={option.value}
 				data-size={size}
 				className={cn(
 					'formItem_content--dropdownOption',
-					option.value === selectedOption?.value ? 'selected' : '',
+					isSelected ? 'selected' : '',
 					option.disabled ? 'disabled' : '',
 					index === hoveredIndex ? 'hovered' : ''
 				)}
 				onClick={() => !option.disabled && handleSelect(option)}
 				onMouseEnter={() => setHoveredIndex(index)}
 				tabIndex={0}>
+				{multiple && (
+					<input
+						type='checkbox'
+						checked={isSelected}
+						onChange={() => {}}
+						className='formItem_content--checkbox'
+					/>
+				)}
 				{option.icon && (
 					<span
 						className='formItem_content--dropdownOptionIcon'
@@ -211,27 +242,49 @@ export const InputSelect = ({
 					className='formItem_content--selectInput'
 					data-size={size}
 					data-status={status}>
-					<input
-						ref={inputRef}
-						autoComplete='off'
-						type='text'
-						id={selectId}
-						name={name}
-						value={selectedOption?.label || (allowSearch ? searchValue : '')}
-						onChange={handleInputChange}
-						onClick={handleInputClick}
-						onFocus={() => setIsOpen(true)}
-						onKeyDown={handleKeyDown}
-						placeholder={placeholder}
-						disabled={disabled}
-						required={required}
-						aria-required={required}
-						aria-invalid={hasError}
-						aria-describedby={helperText ? descriptionId : undefined}
-						readOnly={!allowSearch}
-						{...props}
-					/>
-					{allowClear && selectedOption && (
+					<div className={cn('formItem_content--selectedValues')}>
+						{selectedOptions.map((option) => (
+							<div
+								key={option.value}
+								data-size={size}
+								data-status={status}
+								className={cn('formItem_content--selectedTag')}>
+								{option.label}
+								<button
+									type='button'
+									className={cn('formItem_content--removeTag')}
+									onClick={(e) => handleRemoveOption(option.value, e)}
+									aria-label={`Remove ${option.label}`}>
+									×
+								</button>
+							</div>
+						))}
+						<input
+							ref={inputRef}
+							autoComplete='off'
+							type='text'
+							id={selectId}
+							name={name}
+							value={allowSearch ? searchValue : ''}
+							onChange={handleInputChange}
+							onClick={handleInputClick}
+							onFocus={() => setIsOpen(true)}
+							onKeyDown={handleKeyDown}
+							placeholder={selectedOptions.length === 0 ? placeholder : ''}
+							disabled={disabled}
+							required={required}
+							aria-required={required}
+							aria-invalid={hasError}
+							aria-describedby={helperText ? descriptionId : undefined}
+							readOnly={!allowSearch}
+							className={cn(
+								'formItem_content--input',
+								selectedOptions.length > 0 && 'has-selected-values'
+							)}
+							{...props}
+						/>
+					</div>
+					{allowClear && selectedOptions.length > 0 && (
 						<button
 							type='button'
 							className='formItem_content--clearButton'
@@ -275,7 +328,11 @@ export const InputSelect = ({
 								/>
 							))}
 						{filteredOptions.length === 0 && (
-							<div className='formItem_content--noOptions' data-size={size}>{notFoundRender || 'No options found'}</div>
+							<div
+								className='formItem_content--noOptions'
+								data-size={size}>
+								{notFoundRender || 'No options found'}
+							</div>
 						)}
 					</div>
 				)}
