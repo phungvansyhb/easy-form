@@ -1,0 +1,88 @@
+@use 'sass:map';
+@use 'vars' as *;
+
+:root {
+    --rating-icon-small: 16px;
+    --rating-icon-medium: 24px;
+    --rating-icon-large: 32px;
+}
+
+.formItem_content {
+    &--rating {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+
+        &[data-size='small'] {
+            svg {
+                width: var(--rating-icon-small);
+                height: var(--rating-icon-small);
+            }
+        }
+
+        &[data-size='medium'] {
+            svg {
+                width: var(--rating-icon-medium);
+                height: var(--rating-icon-medium);
+            }
+        }
+
+        &[data-size='large'] {
+            svg {
+                width: var(--rating-icon-large);
+                height: var(--rating-icon-large);
+            }
+        }
+    }
+
+    &--star {
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+
+            &:hover {
+                transform: none;
+            }
+        }
+
+        svg {
+            display: block;
+            transition: fill 0.2s ease;
+
+            &.half {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+            }
+        }
+
+        &.active svg {
+            fill: var(--active-color);
+        }
+
+        &.half-active svg.half {
+            fill: var(--active-color);
+        }
+    }
+}
+
+.helper-text {
+    font-size: var(--input-message-size);
+    margin-top: 4px;
+
+    @each $status, $properties in $input-status {
+        &[data-status='#{$status}'] {
+            color: map.get($properties, message-color);
+        }
+    }
+}

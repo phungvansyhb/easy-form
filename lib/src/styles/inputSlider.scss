@@ -1,0 +1,115 @@
+@use 'sass:map';
+@use 'vars' as *;
+
+@function get-size($size, $property) {
+    @return map.get(map.get($input-sizes, $size), $property);
+}
+
+@function get-status($status, $property) {
+    @return map.get(map.get($input-status, $status), $property);
+}
+
+
+.formItem_content {
+    &--sliderContainer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 4px 0;
+
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @each $size in ('small', 'medium', 'large') {
+            &[data-size='#{$size}'] {
+                .formItem_content--slider {
+                    height: 2px;
+                }
+
+                .formItem_content--sliderThumb {
+                    width: get-size($size, 'font-size');
+                    height: get-size($size, 'font-size');
+                }
+
+                .formItem_content--sliderValue {
+                    font-size: get-size($size, 'font-size');
+                    min-width: get-size($size, 'font-size') * 3;
+                }
+            }
+        }
+    }
+
+    &--slider {
+        position: relative;
+        flex: 1;
+        height: 4px;
+        background-color: get-status('default', 'hover-color');
+        border-radius: 2px;
+        cursor: pointer;
+        transition: var(--input-transition);
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px get-status('default', 'focus-shadow');
+        }
+    }
+
+    &--sliderTrack {
+        @each $status in ('error', 'warning', 'success' , 'default') {
+            &[data-status='#{$status}'] {
+                background-color: get-status($status, 'focus-color');
+            }
+        }
+        position: absolute;
+        height: 100%;
+        border-radius: 2px;
+        transition: var(--input-transition);
+    }
+
+    &--sliderThumb {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        border: 2px solid get-status('default', 'focus-color');
+        border-radius: 50%;
+        cursor: pointer;
+        transition: var(--input-transition);
+
+        &:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        &:active {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+    }
+
+    &--sliderValue {
+        font-size: get-size('medium', 'font-size');
+        color: var(--input-label-color);
+        text-align: right;
+        min-width: 48px;
+    }
+
+    @each $status in ('error', 'warning', 'success' , 'default') {
+        &--sliderContainer[data-status='#{$status}'] {
+            .formItem_content--sliderTrack {
+                background-color: get-status($status, 'focus-color');
+            }
+
+            .formItem_content--sliderThumb {
+                border-color: get-status($status, 'focus-color');
+            }
+
+            .formItem_content--sliderValue {
+                color: get-status($status, 'message-color');
+            }
+        }
+    }
+}

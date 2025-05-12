@@ -1,0 +1,200 @@
+@use 'sass:map';
+@use 'vars' as *;
+
+@function get-size($size, $property) {
+    @return map.get(map.get($input-sizes, $size), $property);
+}
+
+@function get-status($status, $property) {
+    @return map.get(map.get($input-status, $status), $property);
+}
+
+.formItem_content {
+    &--wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &--uploadWrapper {
+        position: relative;
+        width: 100%;
+        border: 2px dashed var(--input-border-color);
+        border-radius: var(--input-border-radius);
+        background-color: #fff;
+        transition: var(--input-transition);
+        cursor: pointer;
+
+        &:hover {
+            border-color: get-status('default', 'hover-color');
+        }
+
+        &.dragging {
+            border-color: get-status('default', 'focus-color');
+            background-color: get-status('default', 'focus-shadow');
+        }
+
+        &.disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.7;
+
+            &:hover {
+                border-color: var(--input-border-color);
+            }
+        }
+
+        @each $status in ('error', 'warning', 'success') {
+            &[data-status='#{$status}'] {
+                border-color: get-status($status, 'border-color');
+
+                &:hover {
+                    border-color: get-status($status, 'hover-color');
+                }
+
+                &.dragging {
+                    border-color: get-status($status, 'focus-color');
+                    background-color: get-status($status, 'focus-shadow');
+                }
+            }
+        }
+    }
+
+    &--fileInput {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &--uploadContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: get-size('medium', 'padding');
+        color: get-status('default', 'hover-color');
+        text-align: center;
+
+        @each $size in ('small', 'medium', 'large') {
+            &[data-size='#{$size}'] {
+                padding: get-size($size, 'padding');
+
+                svg {
+                    width: get-size($size, 'icon-size') * 2;
+                    height: get-size($size, 'icon-size') * 2;
+                }
+            }
+        }
+    }
+
+    &--dragText {
+        margin: 8px 0;
+        font-size: get-size('medium', 'font-size');
+        color: var(--input-label-color);
+
+        @each $size in ('small', 'medium', 'large') {
+            &[data-size='#{$size}'] {
+                font-size: get-size($size, 'font-size');
+            }
+        }
+    }
+
+    &--uploadButton {
+        padding: 8px 16px;
+        background-color: get-status('default', 'focus-color');
+        color: #fff;
+        border: none;
+        border-radius: var(--input-border-radius);
+        font-size: get-size('medium', 'font-size');
+        cursor: pointer;
+        transition: var(--input-transition);
+
+        &:hover {
+            background-color: get-status('default', 'hover-color');
+        }
+
+        &:disabled {
+            background-color: get-status('default', 'hover-color');
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @each $size in ('small', 'medium', 'large') {
+            &[data-size='#{$size}'] {
+                padding: get-size($size, 'padding');
+                font-size: get-size($size, 'font-size');
+            }
+        }
+    }
+
+    &--fileList {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &--fileItem {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        background-color: #f5f5f5;
+        border-radius: var(--input-border-radius);
+        gap: 8px;
+    }
+
+    &--filePreview {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    &--fileIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #fff;
+        border-radius: 4px;
+        color: get-status('default', 'hover-color');
+    }
+
+    &--fileName {
+        flex: 1;
+        font-size: get-size('medium', 'font-size');
+        color: var(--input-label-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &--removeFile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        color: get-status('default', 'hover-color');
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: var(--input-transition);
+
+        &:hover {
+            color: get-status('default', 'focus-color');
+        }
+
+        svg {
+            width: get-size('medium', 'icon-size');
+            height: get-size('medium', 'icon-size');
+        }
+    }
+}

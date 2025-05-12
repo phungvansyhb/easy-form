@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'vars' as *;
+
 html,
 body {
 	box-sizing: border-box;
@@ -8,17 +9,21 @@ body {
 
 .formItem {
 	margin-bottom: 24px;
+
 	&_label {
 		font-size: var(--input-label-size);
+
 		@each $status, $properties in $input-status {
 			&[data-status='#{$status}'] {
 				color: map.get($properties, message-color);
 			}
 		}
+
 		color: var(--input-label-color);
 		font-weight: var(--input-label-weight);
 		margin-bottom: 6px;
 		display: block;
+
 		.sr-only {
 			color: red;
 			margin: -1px;
@@ -35,71 +40,80 @@ body {
 				color: map.get($properties, message-color);
 			}
 		}
+
 		&--container {
 			position: relative;
 			display: flex;
 			align-items: center;
-		} 
+		}
 
 		&--wrapper {
 			width: 100%;
-		} 
+		}
 
 		&--iconPrefix {
 			position: absolute;
+
 			@each $size, $properties in $input-sizes {
 				&[data-size='#{$size}'] {
-					width:  map.get($properties, icon-size);
-					height:  map.get($properties, icon-size);
+					width: map.get($properties, icon-size);
+					height: map.get($properties, icon-size);
 				}
 			}
+
 			left: 12px;
 			display: flex;
 			align-items: center;
 		}
+
 		&--iconSuffix {
 			position: absolute;
+
 			@each $size, $properties in $input-sizes {
 				&[data-size='#{$size}'] {
-					width:  map.get($properties, icon-size);
-					height:  map.get($properties, icon-size);
+					width: map.get($properties, icon-size);
+					height: map.get($properties, icon-size);
 				}
 			}
+
 			right: 12px;
 			display: flex;
 			align-items: center;
 		}
-		&--textInput, &--textArea{
+
+		&--textInput,
+		&--textArea {
 			width: 100%;
 			border: 1px solid var(--input-border-color);
 			border-radius: var(--input-border-radius);
 			transition: var(--input-transition);
 
-			.formItem_content--container .formItem_content--iconPrefix + & {
+			.formItem_content--container .formItem_content--iconPrefix+& {
 				padding-left: 36px;
 			}
+
 			&:has(+ span.formItem_content--iconSuffix) {
-				padding-right: 36px; 
+				padding-right: 36px;
 			}
-			
+
 			@each $size, $properties in $input-sizes {
 				&[data-size='#{$size}'] {
 					padding: map.get($properties, padding);
 					font-size: map.get($properties, font-size);
 				}
 			}
-	
+
 			@each $status, $properties in $input-status {
 				&[data-status='#{$status}'] {
 					border-color: map.get($properties, border-color);
 					color: map.get($properties, message-color);
-	
+
 					&:focus {
 						outline: none;
 						border-color: map.get($properties, focus-color);
 						box-shadow: 0 0 0 2px map.get($properties, focus-shadow);
 					}
-	
+
 					&:hover {
 						border-color: map.get($properties, hover-color);
 					}
@@ -111,6 +125,7 @@ body {
 			line-height: 1.5;
 			resize: none;
 			transition: var(--input-transition);
+
 			&.resizable {
 				resize: vertical;
 			}
@@ -127,11 +142,9 @@ body {
 			margin-top: 4px;
 			font-size: 12px;
 		}
-		
-		
+
+
 	}
 
-	
+
 }
-
-

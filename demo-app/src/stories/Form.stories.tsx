@@ -1,19 +1,21 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import {
 	FormItem,
-	InputText,
 	InputCheckbox,
-	InputRadio,
+	InputDatePicker,
 	InputNumber,
+	InputRadio,
+	InputText,
 	InputTextArea,
+	ReactHookForm,
 	zod,
 	zodResolver,
-	ReactHookForm,
-	InputDatePicker
 } from 'easy-form';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Form } from 'easy-form/src/components/Form';
-
+import { InputPassword } from 'easy-form/src/components/InputPassword';
+import { InputSlider } from 'easy-form/src/components/InputSlider';
+import { InputUpload } from 'easy-form/src/components/InputUpload';
 
 const meta: Meta<typeof Form> = {
 	title: 'Components/FormExample',
@@ -31,11 +33,13 @@ const schema = z.object({
 	name: z.string().min(1),
 	email: z.string().email(),
 	password: z.string().min(8),
+	avatar: z.array(z.any()),
+	birthday: z.date(),
+	age: z.number().min(1),
 	checkbox: z.array(z.string()),
 	radio: z.string(),
 	number: z.number().min(1),
 	textarea: z.string().min(1),
-	date : z.date(),
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormExampleCpn = (args: any) => {
@@ -43,11 +47,13 @@ const FormExampleCpn = (args: any) => {
 		name: 'John',
 		email: 'john@example.com',
 		password: 'password',
+		avatar: [],
+		birthday: new Date(),
+		age: 1,
 		checkbox: ['option1', 'option2'],
 		radio: 'option1',
 		number: 1,
 		textarea: 'textarea',
-		date : new Date(),
 	};
 	const form = ReactHookForm.useForm({
 		resolver: zodResolver(schema),
@@ -59,11 +65,6 @@ const FormExampleCpn = (args: any) => {
 			<Form
 				{...args}
 				form={form}>
-				<FormItem
-					name='date'
-					label='When is your birthday?'>
-					<InputDatePicker size='medium'/>
-				</FormItem>
 				<div className='flex gap-4'>
 					<FormItem
 						name='name'
@@ -76,11 +77,28 @@ const FormExampleCpn = (args: any) => {
 						<InputText />
 					</FormItem>
 				</div>
-
+				<FormItem
+					name='age'
+					label='What is your age?'>
+					<InputSlider />
+				</FormItem>
+				<FormItem
+					name='birthday'
+					label='When is your birthday?'>
+					<InputDatePicker
+						size='medium'
+						label=''
+					/>
+				</FormItem>
+				<FormItem
+					name='avatar'
+					label='Avatar'>
+					<InputUpload />
+				</FormItem>
 				<FormItem
 					name='passwtem'
 					label='Password'>
-					<InputText />
+					<InputPassword name='password' />
 				</FormItem>
 				<FormItem
 					name='number'
@@ -145,7 +163,7 @@ export const FormExample: Story = {
 	render: (args) => <FormExampleCpn {...args} />,
 	args: {
 		onSubmit: (value) => {
-			window.alert('form value : ' + JSON.stringify(value));
+			window.alert('form value : ' + JSON.stringify(value.avatar, null, 2));
 		},
 	},
 };

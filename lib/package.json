@@ -22,7 +22,8 @@
 		"build": "tsc --emitDeclarationOnly && rollup -c",
 		"start": "rollup -c -w",
 		"clean": "rimraf dist",
-		"prebuild": "npm run clean"
+		"prebuild": "npm run clean",
+		"dev" : "npm link && npm run build -- --watch"
 	},
 	"peerDependencies": {
 		"@hookform/resolvers": "^3.0.0",

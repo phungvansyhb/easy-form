@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm link easy-form && vite",
+    "dev": "npm link easy-form && storybook dev -p 6006",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
