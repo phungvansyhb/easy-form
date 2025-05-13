@@ -34,6 +34,8 @@ export interface InputSelectProps {
 	notFoundRender?: React.ReactNode;
 	/** Whether to allow multiple selections */
 	multiple?: boolean;
+	/** Function to call when the search input changes */
+	onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const InputSelect = ({
@@ -52,6 +54,7 @@ export const InputSelect = ({
 	allowSearch = false,
 	notFoundRender,
 	multiple = false,
+	onInputChange,
 	...props
 }: InputSelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -189,6 +192,7 @@ export const InputSelect = ({
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (allowSearch) {
 			setSearchValue(e.target.value);
+			onInputChange?.(e);
 		}
 	};
 

@@ -254,18 +254,42 @@
 			}
 		}
 	}
+
+	&--asyncSelect {
+		position: relative;
+		width: 100%;
+	}
+
+	&--loading {
+		position: absolute;
+		right: 32px;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 1;
+	}
+
+	&--loadingSpinner {
+		width: 16px;
+		height: 16px;
+		border: 2px solid var(--input-border-color);
+		border-top-color: var(--input-focus-color);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	&--noOptions {
+		padding: 8px 12px;
+		color: var(--input-message-color);
+		font-size: var(--input-message-size);
+		text-align: center;
+	}
 }
 
 .formItem_content--noOptions {
-	@each $size in ('small', 'medium', 'large') {
-		&[data-size='#{$size}'] {
-			padding: get-size($size, 'padding');
-			font-size: get-size($size, 'font-size');
-		}
-	}
-
+	font-size: 12px;
+	padding: 4px 8px;
 	color: get-status('default', 'hover-color');
-	text-align: center;
+	text-align: start;
 }
 
 @keyframes dropdownFadeIn {
@@ -295,5 +319,11 @@
 
 	&:hover {
 		background: get-status('default', 'focus-color');
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
 	}
 }
