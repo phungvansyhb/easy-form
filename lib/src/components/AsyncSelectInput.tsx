@@ -6,7 +6,7 @@ import { SelectOption } from '../types/Options';
 import { cn } from '../utils/cn';
 
 export interface AsyncSelectInputProps {
-	name: string;
+	name?: string;
 	/** Function to load options based on search input */
 	loadOptions: (inputValue: string) => Promise<SelectOption[]>;
 	/** The value of the selected option(s) */

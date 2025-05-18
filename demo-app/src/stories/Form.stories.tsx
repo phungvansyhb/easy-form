@@ -12,6 +12,7 @@ import {
 } from 'easy-form';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { AsyncSelectInput } from 'easy-form/src/components/AsyncSelectInput';
 import { Form } from 'easy-form/src/components/Form';
 import { InputPassword } from 'easy-form/src/components/InputPassword';
 import { InputSlider } from 'easy-form/src/components/InputSlider';
@@ -30,6 +31,7 @@ export default meta;
 type Story = StoryObj<typeof Form>;
 const { z } = zod;
 const schema = z.object({
+	country: z.string().min(1),
 	name: z.string().min(1),
 	email: z.string().email(),
 	password: z.string().min(8),
@@ -41,6 +43,28 @@ const schema = z.object({
 	number: z.number().min(1),
 	textarea: z.string().min(1),
 });
+
+const mockOptions = [
+	{ label: 'Vietnam', value: 'vietnam' },
+	{ label: 'United States', value: 'united-states' },
+	{ label: 'France', value: 'france' },
+	{ label: 'Germany', value: 'germany' },
+	{ label: 'Italy', value: 'italy' },
+	{ label: 'Spain', value: 'spain' },
+	{ label: 'Portugal', value: 'portugal' },
+	{ label: 'Japan', value: 'japan' },
+];
+
+const mockLoadOptions = async (inputValue: string): Promise<typeof mockOptions> => {
+	// Simulate API delay
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+
+	// Filter options based on input
+	return mockOptions.filter((option) =>
+		option.label.toLowerCase().includes(inputValue.toLowerCase())
+	);
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormExampleCpn = (args: any) => {
 	const defaultValues = {
@@ -49,6 +73,7 @@ const FormExampleCpn = (args: any) => {
 		password: 'password',
 		avatar: [],
 		birthday: new Date(),
+		country: 'Vietnam',
 		age: 1,
 		checkbox: ['option1', 'option2'],
 		radio: 'option1',
@@ -88,6 +113,15 @@ const FormExampleCpn = (args: any) => {
 					<InputDatePicker
 						size='medium'
 						label=''
+					/>
+				</FormItem>
+				<FormItem
+					name='country'
+					label='Country'>
+					<AsyncSelectInput
+						size='medium'
+						loadOptions={mockLoadOptions}
+						name='country'
 					/>
 				</FormItem>
 				<FormItem

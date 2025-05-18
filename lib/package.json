@@ -1,5 +1,5 @@
 {
-	"name": "easy-form",
+	"name": "@phungvansyhb/easy-form",
 	"version": "1.0.0",
 	"description": "A React library help you manage form. Includes various of input component already",
 	"license": "MIT",

@@ -5,7 +5,7 @@ import { SelectOption, SelectOptions, isGroupedOptions } from '../types/Options'
 import { cn } from '../utils/cn';
 
 export interface InputSelectProps {
-	name: string;
+	name?: string;
 	/** The options to display in the dropdown , it can be an array of options or an array of option groups */
 	options: SelectOptions;
 	/** The position of the option icon */
